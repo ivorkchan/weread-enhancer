@@ -84,29 +84,23 @@ function removeAllFonts() {
 }
 
 // Apply styles on initial load
-chrome.storage.sync.get(
-  Object.keys(readerRules).concat(["customize-font", "font-family"]),
-  (result) => {
-    // Handle font family
-    if (result["customize-font"] && result["font-family"]) {
-      applyFont(result["font-family"]);
-    }
+chrome.storage.sync.get(Object.keys(readerRules).concat(["customize-font", "font-family"]), (result) => {
+  // Handle font family
+  if (result["customize-font"] && result["font-family"]) {
+    applyFont(result["font-family"]);
+  }
 
-    // Handle other toggles
-    Object.keys(readerRules).forEach((rule) => {
-      if (result[rule]) {
-        toggleStylesheet(rule, true);
-      }
-    });
-  },
-);
+  // Handle other toggles
+  Object.keys(readerRules).forEach((rule) => {
+    if (result[rule]) {
+      toggleStylesheet(rule, true);
+    }
+  });
+});
 
 // Non-font changes are instant, font changes require a reload
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (
-    request.action === "toggle_css" &&
-    Object.prototype.hasOwnProperty.call(readerRules, request.rule)
-  ) {
+  if (request.action === "toggle_css" && Object.prototype.hasOwnProperty.call(readerRules, request.rule)) {
     toggleStylesheet(request.rule, request.apply);
   }
 });

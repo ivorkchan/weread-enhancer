@@ -1,20 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const recommendationCheckbox = document.getElementById(
-    "hide-recommendations",
-  );
-  const accountDetailsCheckbox = document.getElementById(
-    "hide-account-details",
-  );
+  const recommendationCheckbox = document.getElementById("hide-recommendations");
+  const accountDetailsCheckbox = document.getElementById("hide-account-details");
   const navbarLinksCheckbox = document.getElementById("hide-navbar-links");
   const textAlignCheckbox = document.getElementById("text-align-start");
   const customizeFontCheckbox = document.getElementById("customize-font");
   const fontSelect = document.getElementById("font-select");
-  const changeBackgroundColorCheckbox = document.getElementById(
-    "change-background-color",
-  );
-  const simplifyFloatingButtonsCheckbox = document.getElementById(
-    "simplify-floating-buttons",
-  );
+  const changeBackgroundColorCheckbox = document.getElementById("change-background-color");
+  const simplifyFloatingButtonsCheckbox = document.getElementById("simplify-floating-buttons");
 
   const controls = {
     "hide-recommendations": recommendationCheckbox,
@@ -46,10 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
   for (const key in controls) {
     if (controls[key]) {
       controls[key].addEventListener("change", (event) => {
-        const value =
-          event.target.type === "checkbox"
-            ? event.target.checked
-            : event.target.value;
+        const value = event.target.type === "checkbox" ? event.target.checked : event.target.value;
         chrome.storage.sync.set({ [key]: value });
 
         // Disable font select if customize-font is not checked
@@ -60,20 +49,12 @@ document.addEventListener("DOMContentLoaded", () => {
         // Send message to active tab to update CSS or reload
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
           const activeTab = tabs[0];
-          if (
-            !activeTab ||
-            !activeTab.id ||
-            !activeTab.url.includes("weread.qq.com")
-          ) {
+          if (!activeTab || !activeTab.id || !activeTab.url.includes("weread.qq.com")) {
             return;
           }
 
           const isReaderPage = activeTab.url.includes("/web/reader/");
-          const needsReload = [
-            "text-align-start",
-            "customize-font",
-            "font-family",
-          ].includes(key);
+          const needsReload = ["text-align-start", "customize-font", "font-family"].includes(key);
 
           if (isReaderPage && needsReload) {
             chrome.tabs.reload(activeTab.id);
