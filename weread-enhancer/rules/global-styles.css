@@ -5,11 +5,7 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 
-* {
-  line-height: 1.75 !important;
-  letter-spacing: 0 !important;
-}
-
-.readerTopBar_title_link {
-  line-height: 24px !important;
+body {
+  line-height: 1.75;
+  letter-spacing: 0;
 }

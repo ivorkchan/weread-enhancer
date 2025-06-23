@@ -5,6 +5,7 @@
   font-style: normal;
 }
 
-* {
-  font-family: "FZNewKai-Z03", kaiti, serif !important;
+.readerChapterContent,
+.readerChapterContent * {
+  font-family: "FZNewKai-Z03", kaiti, serif;
 }

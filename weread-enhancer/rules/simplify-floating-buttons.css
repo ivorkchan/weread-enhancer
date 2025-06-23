@@ -3,3 +3,9 @@
 .readerControls button:nth-of-type(4) {
   display: none !important;
 }
+
+.reader_toolbar_itemContainer button:nth-of-type(2),
+.reader_toolbar_itemContainer button:nth-of-type(3),
+.reader_toolbar_itemContainer button:nth-of-type(5) {
+  display: none !important;
+}

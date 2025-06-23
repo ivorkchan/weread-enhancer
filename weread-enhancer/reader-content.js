@@ -13,6 +13,9 @@ const fontIdMap = {
 const placeholderRegex = /__([\w-]+\.(?:woff2|ttf))__/gi;
 
 async function setStylesheet(styleId, path) {
+  if (!path) {
+    return;
+  }
   removeStylesheet(styleId); // Remove previous version if it exists
 
   const styleElement = document.createElement("style");
@@ -45,6 +48,9 @@ function removeStylesheet(styleId) {
 
 function toggleStylesheet(rule, apply) {
   const path = readerRules[rule];
+  if (!path) {
+    return;
+  }
   const styleId = `weread-enhancer-${rule}`;
   if (apply) {
     setStylesheet(styleId, path);
@@ -55,6 +61,9 @@ function toggleStylesheet(rule, apply) {
 
 function applyFont(fontValue) {
   const fontCssPath = fontIdMap[fontValue];
+  if (!fontCssPath) {
+    return;
+  }
   // Disable all other font stylesheets
   Object.values(fontIdMap).forEach((path) => {
     const styleId = `weread-enhancer-font-${path}`;
@@ -63,10 +72,8 @@ function applyFont(fontValue) {
     }
   });
   // Enable the selected one
-  if (fontCssPath) {
-    const styleId = `weread-enhancer-font-${fontCssPath}`;
-    setStylesheet(styleId, fontCssPath);
-  }
+  const styleId = `weread-enhancer-font-${fontCssPath}`;
+  setStylesheet(styleId, fontCssPath);
 }
 
 function removeAllFonts() {
@@ -86,11 +93,7 @@ chrome.storage.sync.get(
     }
 
     // Handle other toggles
-    [
-      "text-align-start",
-      "change-background-color",
-      "simplify-floating-buttons",
-    ].forEach((rule) => {
+    Object.keys(readerRules).forEach((rule) => {
       if (result[rule]) {
         toggleStylesheet(rule, true);
       }
@@ -100,7 +103,10 @@ chrome.storage.sync.get(
 
 // Non-font changes are instant, font changes require a reload
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === "toggle_css" && readerRules[request.rule]) {
+  if (
+    request.action === "toggle_css" &&
+    Object.prototype.hasOwnProperty.call(readerRules, request.rule)
+  ) {
     toggleStylesheet(request.rule, request.apply);
   }
 });
