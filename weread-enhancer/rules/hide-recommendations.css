@@ -1,0 +1,9 @@
+.wr_index_page_header_search_tags_wrapper,
+.wr_index_page_top_section_header_action,
+.wr_index_page_top_section_content_title,
+.wr_index_page_top_section_content_suggestions,
+.wr_index_page_rank_list_wrapper,
+.wr_index_page_category_list_wrapper,
+.wr_index_page_footer_wrapper {
+  display: none !important;
+}

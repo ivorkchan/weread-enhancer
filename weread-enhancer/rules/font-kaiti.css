@@ -1,0 +1,10 @@
+@font-face {
+  font-family: "FZNewKai-Z03";
+  src: url("__FZXKTK.TTF__") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+  font-family: "FZNewKai-Z03", kaiti, serif !important;
+}

@@ -1,0 +1,11 @@
+.wr_whiteTheme .wr_horizontalReader .readerChapterContent_container,
+.wr_whiteTheme
+  .wr_horizontalReader
+  .wr_horizontalReader_app_content
+  .readerTopBar {
+  background-color: linen;
+}
+
+.wr_whiteTheme .wr_horizontalReader .readerChapterContent {
+  background-color: antiquewhite;
+}

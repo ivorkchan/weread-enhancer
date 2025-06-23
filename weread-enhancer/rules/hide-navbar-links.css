@@ -1,0 +1,4 @@
+.navBar_link,
+.navBar_separator {
+  display: none !important;
+}

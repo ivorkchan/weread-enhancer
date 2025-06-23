@@ -1,0 +1,11 @@
+@font-face {
+  font-family: "HYQiHei";
+  src: url("__HYQiHei_55S.ttf__") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+  font-family:
+    "HYQiHei", "PingFang SC", "Microsoft YaHei", sans-serif !important;
+}

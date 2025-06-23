@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+  <head>
+    <title>WeRead Enhancer</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>WeRead Enhancer</h1>
+      <div class="option">
+        <label for="hide-recommendations">Hide recommendations</label>
+        <input type="checkbox" id="hide-recommendations" />
+      </div>
+      <div class="option">
+        <label for="hide-account-details">Hide account details</label>
+        <input type="checkbox" id="hide-account-details" />
+      </div>
+      <div class="option">
+        <label for="hide-navbar-links">Hide navbar links</label>
+        <input type="checkbox" id="hide-navbar-links" />
+      </div>
+    </div>
+    <hr />
+    <h2>Reader Settings</h2>
+    <div class="option">
+      <label for="text-align-start">Align text to start</label>
+      <input type="checkbox" id="text-align-start" />
+    </div>
+    <div class="option">
+      <label for="customize-font">Customize font</label>
+      <input type="checkbox" id="customize-font" />
+    </div>
+    <div class="sub-option">
+      <label for="font-select">Font Family</label>
+      <select id="font-select">
+        <option value="font-songti">Songti</option>
+        <option value="font-kaiti">Kaiti</option>
+        <option value="font-heiti">Heiti</option>
+      </select>
+    </div>
+    <div class="option">
+      <label for="change-background-color">Change background color</label>
+      <input type="checkbox" id="change-background-color" />
+    </div>
+    <div class="option">
+      <label for="simplify-floating-buttons">Simplify floating buttons</label>
+      <input type="checkbox" id="simplify-floating-buttons" />
+    </div>
+    <script src="popup.js"></script>
+  </body>
+</html>

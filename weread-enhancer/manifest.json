@@ -1,0 +1,78 @@
+{
+  "manifest_version": 3,
+  "name": "WeRead Enhancer",
+  "version": "1.0",
+  "description": "Improve reading experience on WeRead.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "permissions": [
+    "storage",
+    "tabs"
+  ],
+  "host_permissions": [
+    "*://weread.qq.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://weread.qq.com/*"
+      ],
+      "js": [
+        "content.js"
+      ]
+    },
+    {
+      "matches": [
+        "*://weread.qq.com/web/reader/*"
+      ],
+      "js": [
+        "reader-content.js"
+      ],
+      "css": [
+        "rules/global-styles.css"
+      ]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "rules/hide-recommendations.css",
+        "rules/hide-account-details.css",
+        "rules/hide-navbar-links.css",
+        "rules/font-kaiti.css",
+        "rules/font-songti.css",
+        "rules/font-heiti.css",
+        "rules/text-align-start.css",
+        "rules/change-background-color.css",
+        "rules/simplify-floating-buttons.css",
+        "rules/global-styles.css",
+        "fonts/FZXKTK.TTF",
+        "fonts/FZXSSK.TTF",
+        "fonts/HYXinRenWenSong55W.ttf",
+        "fonts/HYXinRenWenSong65W.ttf",
+        "fonts/HYXinRenWenSong75W.ttf",
+        "fonts/HYQiHei_55S.ttf"
+      ],
+      "matches": [
+        "*://weread.qq.com/*"
+      ],
+      "use_dynamic_url": true
+    }
+  ]
+} 

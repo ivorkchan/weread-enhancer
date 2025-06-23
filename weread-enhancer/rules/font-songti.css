@@ -1,0 +1,31 @@
+@font-face {
+  font-family: "HYXinRenWenSong";
+  src: url("__HYXinRenWenSong55W.ttf__") format("truetype");
+  font-weight: 400; /* Normal */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "HYXinRenWenSong";
+  src: url("__HYXinRenWenSong65W.ttf__") format("truetype");
+  font-weight: 500; /* Medium */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "HYXinRenWenSong";
+  src: url("__HYXinRenWenSong75W.ttf__") format("truetype");
+  font-weight: 600; /* SemiBold */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "FZNewShuSong-Z10";
+  src: url("__FZXSSK.TTF__") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+  font-family: "HYXinRenWenSong", "FZNewShuSong-Z10", songti, serif !important;
+}

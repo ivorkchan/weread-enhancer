@@ -1,0 +1,5 @@
+.readerControls button:nth-of-type(2),
+.readerControls button:nth-of-type(3),
+.readerControls button:nth-of-type(4) {
+  display: none !important;
+}
