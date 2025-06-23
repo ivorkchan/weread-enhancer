@@ -1,6 +1,4 @@
-.wr_horizontalReader .readerChapterContent,
-.wr_horizontalReader .readerChapterContent *,
 .readerChapterContent,
 .readerChapterContent * {
-  text-align: start;
+  text-align: left !important;
 }
