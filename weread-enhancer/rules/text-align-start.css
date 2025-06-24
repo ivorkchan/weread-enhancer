@@ -1,4 +1,5 @@
 .readerChapterContent,
-.readerChapterContent * {
+.readerChapterContent p,
+.readerChapterContent blockquote {
   text-align: left !important;
 }
