@@ -5,7 +5,6 @@
   font-style: normal;
 }
 
-.readerChapterContent,
-.readerChapterContent * {
+.wr_various_font_provider_wrapper * {
   font-family: "HYQiHei", "PingFang SC", "Microsoft YaHei", sans-serif;
 }

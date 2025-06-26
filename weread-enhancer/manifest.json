@@ -1,21 +1,16 @@
 {
   "manifest_version": 3,
   "name": "WeRead Enhancer",
-  "version": "1.0",
-  "description": "Improve reading experience on WeRead.",
+  "version": "1.0.1",
+  "description": "Improve reading experience for WeRead web.",
   "icons": {
     "16": "icons/icon16.png",
     "32": "icons/icon32.png",
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
-  "permissions": [
-    "storage",
-    "tabs"
-  ],
-  "host_permissions": [
-    "*://weread.qq.com/*"
-  ],
+  "permissions": ["storage", "tabs"],
+  "host_permissions": ["*://weread.qq.com/*"],
   "background": {
     "service_worker": "background.js"
   },
@@ -30,23 +25,13 @@
   },
   "content_scripts": [
     {
-      "matches": [
-        "*://weread.qq.com/*"
-      ],
-      "js": [
-        "content.js"
-      ]
+      "matches": ["*://weread.qq.com/*"],
+      "js": ["content.js"]
     },
     {
-      "matches": [
-        "*://weread.qq.com/web/reader/*"
-      ],
-      "js": [
-        "reader-content.js"
-      ],
-      "css": [
-        "rules/global-styles.css"
-      ]
+      "matches": ["*://weread.qq.com/web/reader/*"],
+      "js": ["reader-content.js"],
+      "css": ["rules/global-styles.css"]
     }
   ],
   "web_accessible_resources": [
@@ -69,10 +54,8 @@
         "fonts/HYXinRenWenSong75W.ttf",
         "fonts/HYQiHei_55S.ttf"
       ],
-      "matches": [
-        "*://weread.qq.com/*"
-      ],
+      "matches": ["*://weread.qq.com/*"],
       "use_dynamic_url": true
     }
   ]
-} 
+}

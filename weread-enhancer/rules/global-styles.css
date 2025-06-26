@@ -7,13 +7,8 @@ html {
 
 body {
   line-height: 1.75;
-  letter-spacing: 0;
-}
-
-* {
-  letter-spacing: unset !important;
+  letter-spacing: 0 !important;
   word-spacing: unset !important;
   font-feature-settings: unset !important;
   font-kerning: unset !important;
-  text-rendering: unset !important;
 }
