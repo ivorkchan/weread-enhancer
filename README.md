@@ -15,7 +15,7 @@
 ### 阅读器
 
 - 增加行高
-- 更换字体（提供宋体、楷体及黑体，分别选用[汉仪新人文宋](https://www.hanyi.com.cn/productdetail.php?id=758)、[汉仪旗黑](https://www.hanyi.com.cn/productdetail.php?id=832)及[方正新楷体](https://www.foundertype.com/index.php/FontInfo/index/id/290)
+- 更换字体（提供宋体、楷体及黑体，分别选用[汉仪新人文宋](https://www.hanyi.com.cn/productdetail.php?id=758)、[汉仪旗黑](https://www.hanyi.com.cn/productdetail.php?id=832)及[方正新楷体](https://www.foundertype.com/index.php/FontInfo/index/id/290)）
 - 取消两端对齐，使用左对齐
 - 更换背景色
 - 简化控制栏
