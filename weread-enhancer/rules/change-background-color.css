@@ -9,3 +9,7 @@
 .wr_whiteTheme .wr_horizontalReader .readerChapterContent {
   background-color: antiquewhite;
 }
+
+.wr_whiteTheme .readerChapterContent {
+  color: #302010;
+}

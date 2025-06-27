@@ -11,3 +11,14 @@
 .reader_toolbar_itemContainer button:nth-of-type(5) {
   display: none;
 }
+
+.readerTopBar .readerTopBar_inner,
+.wr_horizontalReader .readerControls {
+  opacity: 0;
+  transition: all 300ms ease-in-out;
+}
+
+.readerTopBar .readerTopBar_inner:hover,
+.wr_horizontalReader .readerControls:hover {
+  opacity: 1;
+}

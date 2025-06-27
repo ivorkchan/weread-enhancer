@@ -49,10 +49,10 @@
         "rules/global-styles.css",
         "fonts/FZXKTK.TTF",
         "fonts/FZXSSK.TTF",
+        "fonts/FZYouHK_508R.TTF",
         "fonts/HYXinRenWenSong55W.ttf",
         "fonts/HYXinRenWenSong65W.ttf",
-        "fonts/HYXinRenWenSong75W.ttf",
-        "fonts/HYQiHei_55S.ttf"
+        "fonts/HYXinRenWenSong75W.ttf"
       ],
       "matches": ["*://weread.qq.com/*"],
       "use_dynamic_url": true
