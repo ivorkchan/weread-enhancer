@@ -12,3 +12,18 @@ body {
   font-feature-settings: unset !important;
   font-kerning: unset !important;
 }
+
+.wr_various_font_provider_wrapper h1 {
+  margin-top: 32px !important;
+  margin-bottom: 24px !important;
+}
+
+.wr_various_font_provider_wrapper h2 {
+  margin-top: 24px !important;
+  margin-bottom: 16px !important;
+}
+
+.wr_various_font_provider_wrapper h3 {
+  margin-top: 24px !important;
+  margin-bottom: 16px !important;
+}
