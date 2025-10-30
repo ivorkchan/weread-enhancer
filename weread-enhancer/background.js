@@ -7,6 +7,7 @@ chrome.runtime.onInstalled.addListener(() => {
       "text-align-start",
       "customize-font",
       "font-family",
+      "custom-font-name",
       "change-background-color",
       "simplify-floating-buttons",
     ],
@@ -29,6 +30,9 @@ chrome.runtime.onInstalled.addListener(() => {
       }
       if (typeof items["font-family"] === "undefined") {
         defaults["font-family"] = "font-songti";
+      }
+      if (typeof items["custom-font-name"] === "undefined") {
+        defaults["custom-font-name"] = "";
       }
       if (typeof items["change-background-color"] === "undefined") {
         defaults["change-background-color"] = true;

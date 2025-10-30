@@ -13,3 +13,16 @@
 .wr_whiteTheme .readerChapterContent {
   color: #302010;
 }
+.wr_horizontalReader .readerChapterContent {
+  border-radius: 24px;
+}
+
+.wr_whiteTheme .wr_horizontalReader .renderTarget_pager_button {
+  color: #302010;
+  border-color: transparent;
+  transition: all 0.3s ease;
+}
+
+.wr_whiteTheme .wr_horizontalReader .renderTarget_pager_button:hover {
+  background-color: linen;
+}

@@ -1,14 +1,14 @@
-.readerControls button:nth-of-type(2) {
+.readerControls div:nth-of-type(2) {
   display: none;
 }
 
-.wr_horizontalReader .readerControls button:nth-of-type(4) {
+.wr_horizontalReader .readerControls div:nth-of-type(4) {
   display: none;
 }
 
-.reader_toolbar_itemContainer button:nth-of-type(3),
-.reader_toolbar_itemContainer button:nth-of-type(4),
-.reader_toolbar_itemContainer button:nth-of-type(5) {
+.reader_toolbar_itemContainer .underlineHandWrite,
+.reader_toolbar_itemContainer .underlineStraight,
+.reader_toolbar_itemContainer .review {
   display: none;
 }
 

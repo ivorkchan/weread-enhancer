@@ -1,12 +1,22 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const recommendationCheckbox = document.getElementById("hide-recommendations");
-  const accountDetailsCheckbox = document.getElementById("hide-account-details");
+  const recommendationCheckbox = document.getElementById(
+    "hide-recommendations",
+  );
+  const accountDetailsCheckbox = document.getElementById(
+    "hide-account-details",
+  );
   const navbarLinksCheckbox = document.getElementById("hide-navbar-links");
   const textAlignCheckbox = document.getElementById("text-align-start");
   const customizeFontCheckbox = document.getElementById("customize-font");
   const fontSelect = document.getElementById("font-select");
-  const changeBackgroundColorCheckbox = document.getElementById("change-background-color");
-  const simplifyFloatingButtonsCheckbox = document.getElementById("simplify-floating-buttons");
+  const customFontInput = document.getElementById("custom-font-input");
+  const customFontContainer = document.getElementById("custom-font-container");
+  const changeBackgroundColorCheckbox = document.getElementById(
+    "change-background-color",
+  );
+  const simplifyFloatingButtonsCheckbox = document.getElementById(
+    "simplify-floating-buttons",
+  );
 
   const controls = {
     "hide-recommendations": recommendationCheckbox,
@@ -17,6 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "font-family": fontSelect,
     "change-background-color": changeBackgroundColorCheckbox,
     "simplify-floating-buttons": simplifyFloatingButtonsCheckbox,
+    "custom-font-name": customFontInput,
   };
 
   // Load saved settings
@@ -26,35 +37,65 @@ document.addEventListener("DOMContentLoaded", () => {
         if (controls[key].type === "checkbox") {
           controls[key].checked = !!result[key];
         } else {
-          controls[key].value = result[key] || "font-songti";
+          if (key === "font-family") {
+            controls[key].value = result[key] || "font-songti";
+          } else if (key === "custom-font-name") {
+            controls[key].value = result[key] || "";
+          }
         }
       }
     }
-    // Disable font select if customize-font is not checked
     fontSelect.disabled = !customizeFontCheckbox.checked;
+    const showCustom =
+      customizeFontCheckbox.checked && fontSelect.value === "font-custom";
+    customFontContainer.style.display = showCustom ? "flex" : "none";
+    customFontInput.disabled = !showCustom;
   });
 
   // Add change listeners
   for (const key in controls) {
     if (controls[key]) {
       controls[key].addEventListener("change", (event) => {
-        const value = event.target.type === "checkbox" ? event.target.checked : event.target.value;
+        const value =
+          event.target.type === "checkbox"
+            ? event.target.checked
+            : event.target.value;
         chrome.storage.sync.set({ [key]: value });
 
-        // Disable font select if customize-font is not checked
         if (key === "customize-font") {
           fontSelect.disabled = !value;
+          const showCustom = value && fontSelect.value === "font-custom";
+          customFontContainer.style.display = showCustom ? "flex" : "none";
+          customFontInput.disabled = !showCustom;
+        }
+
+        if (key === "font-family") {
+          const showCustom =
+            customizeFontCheckbox.checked && fontSelect.value === "font-custom";
+          customFontContainer.style.display = showCustom ? "flex" : "none";
+          customFontInput.disabled = !showCustom;
         }
 
         // Send message to active tab to update CSS or reload
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
           const activeTab = tabs[0];
-          if (!activeTab || !activeTab.id || !activeTab.url.includes("weread.qq.com")) {
+          if (
+            !activeTab ||
+            !activeTab.id ||
+            !activeTab.url.includes("weread.qq.com")
+          ) {
             return;
           }
 
           const isReaderPage = activeTab.url.includes("/web/reader/");
-          const needsReload = ["text-align-start", "customize-font", "font-family"].includes(key);
+          let needsReload = [
+            "text-align-start",
+            "customize-font",
+            "custom-font-name",
+          ].includes(key);
+          if (key === "font-family") {
+            needsReload = fontSelect.value !== "font-custom";
+          }
 
           if (isReaderPage && needsReload) {
             chrome.tabs.reload(activeTab.id);

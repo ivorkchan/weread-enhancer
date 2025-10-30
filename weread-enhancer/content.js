@@ -34,7 +34,7 @@ chrome.storage.sync.get(Object.keys(rules), (result) => {
 });
 
 // Listen for messages from the popup
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((request) => {
   if (request.action === "toggle_css") {
     toggleStylesheet(request.rule, request.apply);
   }

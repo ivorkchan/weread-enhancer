@@ -1,11 +1,7 @@
 body {
-  font-family:
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
     sans-serif;
-  width: 15rem;
+  width: 18rem;
   padding: 1rem;
 }
 
@@ -54,8 +50,4 @@ hr {
   justify-content: space-between;
   align-items: center;
   padding-left: 1rem;
-}
-
-select {
-  min-width: 5rem;
 }
