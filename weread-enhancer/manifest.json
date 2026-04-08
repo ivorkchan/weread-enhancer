@@ -26,12 +26,12 @@
   "content_scripts": [
     {
       "matches": ["*://weread.qq.com/*"],
-      "js": ["content.js"]
+      "js": ["content.js"],
+      "css": ["rules/global-styles.css"]
     },
     {
       "matches": ["*://weread.qq.com/web/reader/*"],
-      "js": ["reader-content.js"],
-      "css": ["rules/global-styles.css"]
+      "js": ["reader-content.js"]
     }
   ],
   "web_accessible_resources": [
