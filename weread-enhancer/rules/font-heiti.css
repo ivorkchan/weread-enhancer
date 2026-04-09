@@ -1,6 +1,6 @@
 @font-face {
   font-family: "FZYouHei_GBK";
-  src: url("__FZYouHK_508R.TTF__") format("truetype");
+  src: url("chrome-extension://__MSG_@@extension_id__/fonts/FZYouHK_508R.TTF") format("truetype");
   font-weight: normal;
   font-style: normal;
 }

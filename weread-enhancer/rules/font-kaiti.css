@@ -1,6 +1,6 @@
 @font-face {
   font-family: "FZNewKai-Z03";
-  src: url("__FZXKTK.TTF__") format("truetype");
+  src: url("chrome-extension://__MSG_@@extension_id__/fonts/FZXKTK.TTF") format("truetype");
   font-weight: normal;
   font-style: normal;
 }

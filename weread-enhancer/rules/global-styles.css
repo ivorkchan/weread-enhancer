@@ -1,15 +1,19 @@
 html {
   font-synthesis: none;
+  /* font-variant-east-asian: proportional-width; */
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-autospace: normal;
   text-spacing-trim: normal;
+  text-justify: inter-character;
+  hanging-punctuation: allow-end;
+  line-break: strict;
 }
 
 body {
   line-height: 1.75;
-  letter-spacing: 0 !important;
+  letter-spacing: unset !important;
   word-spacing: unset !important;
   font-feature-settings: unset !important;
   font-kerning: unset !important;

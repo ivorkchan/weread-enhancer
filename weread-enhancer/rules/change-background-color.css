@@ -1,28 +1,28 @@
 .wr_whiteTheme .readerContent,
 .wr_whiteTheme .wr_horizontalReader .readerChapterContent_container,
 .wr_whiteTheme .wr_horizontalReader .wr_horizontalReader_app_content .readerTopBar {
-  background-color: linen;
+  background-color: linen !important;
 }
 
 .wr_whiteTheme .readerTopBar,
 .wr_whiteTheme .readerContent .app_content,
 .wr_whiteTheme .wr_horizontalReader .readerChapterContent {
-  background-color: antiquewhite;
+  background-color: antiquewhite !important;
 }
 
 .wr_whiteTheme .readerChapterContent {
-  color: #302010;
+  color: #302010 !important;
 }
 .wr_horizontalReader .readerChapterContent {
-  border-radius: 24px;
+  border-radius: 24px !important;
 }
 
 .wr_whiteTheme .wr_horizontalReader .renderTarget_pager_button {
-  color: #302010;
-  border-color: transparent;
+  color: #302010 !important;
+  border-color: transparent !important;
   transition: all 0.3s ease;
 }
 
 .wr_whiteTheme .wr_horizontalReader .renderTarget_pager_button:hover {
-  background-color: linen;
+  background-color: linen !important;
 }

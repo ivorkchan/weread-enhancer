@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "WeRead Enhancer",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "Improve reading experience for WeRead web.",
   "icons": {
     "16": "icons/icon16.png",
@@ -9,7 +9,7 @@
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
-  "permissions": ["storage", "tabs"],
+  "permissions": ["storage", "tabs", "scripting"],
   "host_permissions": ["*://weread.qq.com/*"],
   "background": {
     "service_worker": "background.js"
@@ -26,12 +26,12 @@
   "content_scripts": [
     {
       "matches": ["*://weread.qq.com/*"],
-      "js": ["content.js"],
       "css": ["rules/global-styles.css"]
     },
     {
       "matches": ["*://weread.qq.com/web/reader/*"],
-      "js": ["reader-content.js"]
+      "js": ["reader-content.js"],
+      "run_at": "document_start"
     }
   ],
   "web_accessible_resources": [
@@ -54,8 +54,7 @@
         "fonts/HYXinRenWenSong65W.ttf",
         "fonts/HYXinRenWenSong75W.ttf"
       ],
-      "matches": ["*://weread.qq.com/*"],
-      "use_dynamic_url": true
+      "matches": ["*://weread.qq.com/*"]
     }
   ]
 }
