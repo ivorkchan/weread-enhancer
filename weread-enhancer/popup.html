@@ -1,66 +1,67 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="utf-8" />
     <title>WeRead Enhancer</title>
     <link rel="stylesheet" href="popup.css" />
   </head>
   <body>
-    <div class="container">
+    <header class="header">
       <h1>WeRead Enhancer</h1>
-      <hr />
-      <div class="section">
-        <h2>General Settings</h2>
-        <div class="options">
-          <div class="option">
-            <label for="hide-recommendations">Hide recommendations</label>
-            <input type="checkbox" id="hide-recommendations" />
-          </div>
-          <div class="option">
-            <label for="hide-account-details">Hide account details</label>
-            <input type="checkbox" id="hide-account-details" />
-          </div>
-          <div class="option">
-            <label for="hide-navbar-links">Hide navbar links</label>
-            <input type="checkbox" id="hide-navbar-links" />
-          </div>
+      <span class="version" id="version"></span>
+    </header>
+
+    <section class="section">
+      <h2 class="section-title">General</h2>
+      <div class="card">
+        <label class="row">
+          <span class="row-label">Hide recommendations</span>
+          <input type="checkbox" class="switch" id="hide-recommendations" />
+        </label>
+        <label class="row">
+          <span class="row-label">Hide account details</span>
+          <input type="checkbox" class="switch" id="hide-account-details" />
+        </label>
+        <label class="row">
+          <span class="row-label">Hide navbar links</span>
+          <input type="checkbox" class="switch" id="hide-navbar-links" />
+        </label>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Reader</h2>
+      <div class="card">
+        <label class="row">
+          <span class="row-label">Align text to start</span>
+          <input type="checkbox" class="switch" id="text-align-start" />
+        </label>
+        <label class="row">
+          <span class="row-label">Change background color</span>
+          <input type="checkbox" class="switch" id="change-background-color" />
+        </label>
+        <label class="row">
+          <span class="row-label">Simplify floating buttons</span>
+          <input type="checkbox" class="switch" id="simplify-floating-buttons" />
+        </label>
+        <div class="row">
+          <label class="row-label" for="font-family">Font family</label>
+          <select id="font-family" class="field">
+            <option value="font-default">Default</option>
+            <option value="font-songti">Songti</option>
+            <option value="font-kaiti">Kaiti</option>
+            <option value="font-heiti">Heiti</option>
+            <option value="font-custom">Custom</option>
+          </select>
+        </div>
+        <div class="row sub-row" id="custom-font-row" hidden>
+          <label class="row-label" for="custom-font-name">Font name</label>
+          <input type="text" id="custom-font-name" class="field" placeholder="e.g. Kaiti SC" spellcheck="false" />
         </div>
       </div>
-      <hr />
-      <div class="section">
-        <h2>Reader Settings</h2>
-        <div class="options">
-          <div class="option">
-            <label for="text-align-start">Align text to start</label>
-            <input type="checkbox" id="text-align-start" />
-          </div>
-          <div class="option">
-            <label for="customize-font">Customize font</label>
-            <input type="checkbox" id="customize-font" />
-          </div>
-          <div class="sub-option">
-            <label for="font-select">Font family</label>
-            <select id="font-select">
-              <option value="font-songti">Songti</option>
-              <option value="font-kaiti">Kaiti</option>
-              <option value="font-heiti">Heiti</option>
-              <option value="font-custom">Custom</option>
-            </select>
-          </div>
-          <div class="sub-option" id="custom-font-container">
-            <label for="custom-font-input">Custom font name</label>
-            <input type="text" id="custom-font-input" placeholder="e.g. Kaiti SC" />
-          </div>
-          <div class="option">
-            <label for="change-background-color">Change background color</label>
-            <input type="checkbox" id="change-background-color" />
-          </div>
-          <div class="option">
-            <label for="simplify-floating-buttons">Simplify floating buttons</label>
-            <input type="checkbox" id="simplify-floating-buttons" />
-          </div>
-        </div>
-      </div>
-    </div>
+    </section>
+
+    <script src="settings.js"></script>
     <script src="popup.js"></script>
   </body>
 </html>

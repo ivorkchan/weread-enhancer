@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "WeRead Enhancer",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "Improve reading experience for WeRead web.",
   "icons": {
     "16": "icons/icon16.png",
@@ -9,7 +9,7 @@
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
-  "permissions": ["storage", "tabs", "scripting"],
+  "permissions": ["storage", "scripting"],
   "host_permissions": ["*://weread.qq.com/*"],
   "background": {
     "service_worker": "background.js"
@@ -26,7 +26,8 @@
   "content_scripts": [
     {
       "matches": ["*://weread.qq.com/*"],
-      "css": ["rules/global-styles.css"]
+      "css": ["rules/global-styles.css"],
+      "run_at": "document_start"
     },
     {
       "matches": ["*://weread.qq.com/web/reader/*"],
@@ -36,24 +37,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": [
-        "rules/hide-recommendations.css",
-        "rules/hide-account-details.css",
-        "rules/hide-navbar-links.css",
-        "rules/font-kaiti.css",
-        "rules/font-songti.css",
-        "rules/font-heiti.css",
-        "rules/text-align-start.css",
-        "rules/change-background-color.css",
-        "rules/simplify-floating-buttons.css",
-        "rules/global-styles.css",
-        "fonts/FZXKTK.TTF",
-        "fonts/FZXSSK.TTF",
-        "fonts/FZYouHK_508R.TTF",
-        "fonts/HYXinRenWenSong55W.ttf",
-        "fonts/HYXinRenWenSong65W.ttf",
-        "fonts/HYXinRenWenSong75W.ttf"
-      ],
+      "resources": ["fonts/*.woff2"],
       "matches": ["*://weread.qq.com/*"]
     }
   ]

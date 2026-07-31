@@ -1,8 +1,9 @@
 @font-face {
   font-family: "FZYouHei_GBK";
-  src: url("chrome-extension://__MSG_@@extension_id__/fonts/FZYouHK_508R.TTF") format("truetype");
+  src: url("chrome-extension://__MSG_@@extension_id__/fonts/FZYouHK_508R.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 .wr_various_font_provider_wrapper * {

@@ -1,200 +1,217 @@
-const STYLE_SETTING_KEYS = [
+importScripts("settings.js");
+
+const GENERAL_MATCHES = ["*://weread.qq.com/*"];
+const READER_MATCHES = ["*://weread.qq.com/web/reader/*"];
+
+const STYLE_SCRIPTS = {
+  "hide-recommendations": {
+    id: "hide-recommendations",
+    matches: GENERAL_MATCHES,
+    css: ["rules/hide-recommendations.css"],
+  },
+  "hide-account-details": {
+    id: "hide-account-details",
+    matches: GENERAL_MATCHES,
+    css: ["rules/hide-account-details.css"],
+  },
+  "hide-navbar-links": {
+    id: "hide-navbar-links",
+    matches: GENERAL_MATCHES,
+    css: ["rules/hide-navbar-links.css"],
+  },
+  "text-align-start": {
+    id: "reader-text-align-start",
+    matches: READER_MATCHES,
+    css: ["rules/text-align-start.css"],
+  },
+  "change-background-color": {
+    id: "reader-change-background-color",
+    matches: READER_MATCHES,
+    css: ["rules/change-background-color.css"],
+  },
+  "simplify-floating-buttons": {
+    id: "reader-simplify-floating-buttons",
+    matches: READER_MATCHES,
+    css: ["rules/simplify-floating-buttons.css"],
+  },
+  "font-songti": {
+    id: "reader-font-songti",
+    matches: READER_MATCHES,
+    css: ["rules/font-songti.css"],
+  },
+  "font-kaiti": {
+    id: "reader-font-kaiti",
+    matches: READER_MATCHES,
+    css: ["rules/font-kaiti.css"],
+  },
+  "font-heiti": {
+    id: "reader-font-heiti",
+    matches: READER_MATCHES,
+    css: ["rules/font-heiti.css"],
+  },
+};
+
+const TOGGLED_SCRIPT_KEYS = [
   "hide-recommendations",
   "hide-account-details",
   "hide-navbar-links",
   "text-align-start",
-  "customize-font",
-  "font-family",
-  "custom-font-name",
   "change-background-color",
   "simplify-floating-buttons",
 ];
 
-const DEFAULT_SETTINGS = {
-  "hide-recommendations": true,
-  "hide-account-details": true,
-  "hide-navbar-links": true,
-  "text-align-start": true,
-  "customize-font": true,
-  "font-family": "font-songti",
-  "custom-font-name": "",
-  "change-background-color": true,
-  "simplify-floating-buttons": true,
-};
-
-const registeredStyleScripts = {
-  "hide-recommendations": {
-    id: "hide-recommendations",
-    matches: ["*://weread.qq.com/*"],
-    css: ["rules/hide-recommendations.css"],
-    runAt: "document_start",
-  },
-  "hide-account-details": {
-    id: "hide-account-details",
-    matches: ["*://weread.qq.com/*"],
-    css: ["rules/hide-account-details.css"],
-    runAt: "document_start",
-  },
-  "hide-navbar-links": {
-    id: "hide-navbar-links",
-    matches: ["*://weread.qq.com/*"],
-    css: ["rules/hide-navbar-links.css"],
-    runAt: "document_start",
-  },
-  "text-align-start": {
-    id: "reader-text-align-start",
-    matches: ["*://weread.qq.com/web/reader/*"],
-    css: ["rules/text-align-start.css"],
-    runAt: "document_start",
-  },
-  "change-background-color": {
-    id: "reader-change-background-color",
-    matches: ["*://weread.qq.com/web/reader/*"],
-    css: ["rules/change-background-color.css"],
-    runAt: "document_start",
-  },
-  "simplify-floating-buttons": {
-    id: "reader-simplify-floating-buttons",
-    matches: ["*://weread.qq.com/web/reader/*"],
-    css: ["rules/simplify-floating-buttons.css"],
-    runAt: "document_start",
-  },
-  "font-songti": {
-    id: "reader-font-songti",
-    matches: ["*://weread.qq.com/web/reader/*"],
-    css: ["rules/font-songti.css"],
-    runAt: "document_start",
-  },
-  "font-kaiti": {
-    id: "reader-font-kaiti",
-    matches: ["*://weread.qq.com/web/reader/*"],
-    css: ["rules/font-kaiti.css"],
-    runAt: "document_start",
-  },
-  "font-heiti": {
-    id: "reader-font-heiti",
-    matches: ["*://weread.qq.com/web/reader/*"],
-    css: ["rules/font-heiti.css"],
-    runAt: "document_start",
-  },
-};
-
-const managedStyleScriptIds = Object.values(registeredStyleScripts).map((script) => script.id);
+const MANAGED_SCRIPT_IDS = Object.values(STYLE_SCRIPTS).map((script) => script.id);
 
 let styleSync = Promise.resolve();
 
 function getDesiredScripts(settings) {
-  const scripts = [];
+  const scripts = TOGGLED_SCRIPT_KEYS.filter((key) => settings[key]).map((key) => STYLE_SCRIPTS[key]);
 
-  if (settings["hide-recommendations"]) {
-    scripts.push(registeredStyleScripts["hide-recommendations"]);
-  }
-  if (settings["hide-account-details"]) {
-    scripts.push(registeredStyleScripts["hide-account-details"]);
-  }
-  if (settings["hide-navbar-links"]) {
-    scripts.push(registeredStyleScripts["hide-navbar-links"]);
-  }
-  if (settings["text-align-start"]) {
-    scripts.push(registeredStyleScripts["text-align-start"]);
-  }
-  if (settings["change-background-color"]) {
-    scripts.push(registeredStyleScripts["change-background-color"]);
-  }
-  if (settings["simplify-floating-buttons"]) {
-    scripts.push(registeredStyleScripts["simplify-floating-buttons"]);
-  }
-  if (settings["customize-font"] && settings["font-family"] && settings["font-family"] !== "font-custom") {
-    const fontScript = registeredStyleScripts[settings["font-family"]];
-    if (fontScript) {
-      scripts.push(fontScript);
-    }
+  // "font-default" and "font-custom" have no packaged stylesheet, so they fall through.
+  const fontScript = STYLE_SCRIPTS[settings["font-family"]];
+  if (fontScript) {
+    scripts.push(fontScript);
   }
 
-  return scripts;
+  return scripts.map((script) => ({ ...script, runAt: "document_start" }));
 }
 
-async function applyStyleRegistrations(settings) {
-  const existingScripts = await chrome.scripting.getRegisteredContentScripts({
-    ids: managedStyleScriptIds,
-  });
+async function applyStyleRegistrations(settings, { force = false } = {}) {
+  const registered = await chrome.scripting.getRegisteredContentScripts({ ids: MANAGED_SCRIPT_IDS });
+  const registeredIds = new Set(registered.map((script) => script.id));
+  const desired = getDesiredScripts(settings);
+  const desiredIds = new Set(desired.map((script) => script.id));
 
-  if (existingScripts.length > 0) {
-    await chrome.scripting.unregisterContentScripts({
-      ids: existingScripts.map((script) => script.id),
-    });
+  // Only touch scripts whose presence changed; definitions are static, so
+  // already-registered ids need no update. `force` re-registers everything to
+  // flush definitions left behind by a previous extension version.
+  const toUnregister = force ? [...registeredIds] : [...registeredIds].filter((id) => !desiredIds.has(id));
+  const toRegister = force ? desired : desired.filter((script) => !registeredIds.has(script.id));
+
+  if (toUnregister.length > 0) {
+    await chrome.scripting.unregisterContentScripts({ ids: toUnregister });
   }
-
-  const desiredScripts = getDesiredScripts(settings);
-  if (desiredScripts.length > 0) {
-    await chrome.scripting.registerContentScripts(desiredScripts);
+  if (toRegister.length > 0) {
+    await chrome.scripting.registerContentScripts(toRegister);
   }
 }
 
-function queueStyleSync(settingsPromise) {
+function queueStyleSync(getSettings, options) {
   styleSync = styleSync
     .catch(() => {})
     .then(async () => {
-      const settings = await settingsPromise;
-      await applyStyleRegistrations(settings);
+      const settings = await getSettings();
+      await applyStyleRegistrations(settings, options);
     });
 
   return styleSync;
 }
 
-async function syncStyles() {
-  return queueStyleSync(chrome.storage.sync.get(STYLE_SETTING_KEYS));
+function syncStyles(options) {
+  return queueStyleSync(() => chrome.storage.sync.get(DEFAULT_SETTINGS), options);
 }
 
 async function initializeDefaults() {
-  const stored = await chrome.storage.sync.get(Object.keys(DEFAULT_SETTINGS));
-  const defaults = {};
+  const stored = await chrome.storage.sync.get([...STYLE_SETTING_KEYS, "customize-font"]);
+  const updates = {};
 
-  Object.keys(DEFAULT_SETTINGS).forEach((key) => {
-    if (typeof stored[key] === "undefined") {
-      defaults[key] = DEFAULT_SETTINGS[key];
+  // Until v1.0 a separate "customize-font" toggle gated the font selection; an
+  // unchecked toggle now maps to the "Default" font option.
+  if (typeof stored["customize-font"] !== "undefined") {
+    if (stored["customize-font"] === false) {
+      updates["font-family"] = "font-default";
     }
-  });
-
-  if (Object.keys(defaults).length > 0) {
-    await chrome.storage.sync.set(defaults);
-    return { ...stored, ...defaults };
+    await chrome.storage.sync.remove("customize-font");
   }
 
-  return stored;
+  for (const key of STYLE_SETTING_KEYS) {
+    if (typeof stored[key] === "undefined") {
+      updates[key] = DEFAULT_SETTINGS[key];
+    }
+  }
+
+  if (Object.keys(updates).length > 0) {
+    await chrome.storage.sync.set(updates);
+  }
+}
+
+async function reloadWereadTab(scope, tabId) {
+  let tab;
+  try {
+    tab = await chrome.tabs.get(tabId);
+  } catch {
+    return; // Tab was closed in the meantime.
+  }
+
+  const url = tab?.url || "";
+  if (!url.includes("weread.qq.com")) {
+    return;
+  }
+
+  // "general" styles affect every WeRead page; "reader" styles only matter on reader pages.
+  if (scope === "general" || url.includes("/web/reader/")) {
+    await chrome.tabs.reload(tabId);
+  }
+}
+
+// Collapse bursts of popup changes into a single sync + reload. The popup sends
+// the tab id it was opened on, so a tab switch during the debounce cannot
+// redirect the reload.
+let pendingReloadScope = null;
+let pendingReloadTabId = null;
+let applyTimer = null;
+
+function scheduleApply(scope, tabId) {
+  if (scope === "general" || (scope === "reader" && pendingReloadScope === null)) {
+    pendingReloadScope = scope;
+  }
+  if (typeof tabId === "number") {
+    pendingReloadTabId = tabId;
+  }
+
+  clearTimeout(applyTimer);
+  applyTimer = setTimeout(async () => {
+    const reloadScope = pendingReloadScope;
+    const reloadTabId = pendingReloadTabId;
+    pendingReloadScope = null;
+    pendingReloadTabId = null;
+
+    try {
+      await syncStyles();
+      if (reloadScope && reloadTabId !== null) {
+        await reloadWereadTab(reloadScope, reloadTabId);
+      }
+    } catch (error) {
+      console.error("Failed to apply style changes.", error);
+    }
+  }, 300);
 }
 
 chrome.runtime.onInstalled.addListener(() => {
-  void initializeDefaults().then((settings) => queueStyleSync(Promise.resolve(settings)));
+  void initializeDefaults().then(() => syncStyles({ force: true }));
 });
 
 chrome.runtime.onStartup.addListener(() => {
   void syncStyles();
 });
 
+// Covers writes that bypass the popup message, e.g. settings synced from another device.
 chrome.storage.onChanged.addListener((changes, areaName) => {
   if (areaName !== "sync") {
     return;
   }
 
-  const hasRelevantChange = STYLE_SETTING_KEYS.some((key) => Object.prototype.hasOwnProperty.call(changes, key));
-
-  if (hasRelevantChange) {
+  if (STYLE_SETTING_KEYS.some((key) => Object.prototype.hasOwnProperty.call(changes, key))) {
     void syncStyles();
   }
 });
 
 chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
-  if (request.action !== "sync_styles") {
+  if (request.action !== "apply_settings") {
     return false;
   }
 
-  syncStyles()
-    .then(() => sendResponse({ ok: true }))
-    .catch((error) => {
-      console.error("Failed to sync styles.", error);
-      sendResponse({ ok: false, error: error.message });
-    });
-
-  return true;
+  scheduleApply(request.scope ?? null, request.tabId);
+  sendResponse({ ok: true });
+  return false;
 });

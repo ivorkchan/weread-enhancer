@@ -1,94 +1,104 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const generalReloadKeys = new Set(["hide-recommendations", "hide-account-details", "hide-navbar-links"]);
-  const readerReloadKeys = new Set([
-    "text-align-start",
-    "customize-font",
-    "font-family",
-    "custom-font-name",
-    "change-background-color",
-    "simplify-floating-buttons",
-  ]);
+const GENERAL_KEYS = new Set(["hide-recommendations", "hide-account-details", "hide-navbar-links"]);
+const READER_KEYS = new Set(["text-align-start", "change-background-color", "simplify-floating-buttons"]);
 
-  const recommendationCheckbox = document.getElementById("hide-recommendations");
-  const accountDetailsCheckbox = document.getElementById("hide-account-details");
-  const navbarLinksCheckbox = document.getElementById("hide-navbar-links");
-  const textAlignCheckbox = document.getElementById("text-align-start");
-  const customizeFontCheckbox = document.getElementById("customize-font");
-  const fontSelect = document.getElementById("font-select");
-  const customFontInput = document.getElementById("custom-font-input");
-  const customFontContainer = document.getElementById("custom-font-container");
-  const changeBackgroundColorCheckbox = document.getElementById("change-background-color");
-  const simplifyFloatingButtonsCheckbox = document.getElementById("simplify-floating-buttons");
+const controls = {};
+for (const key of STYLE_SETTING_KEYS) {
+  controls[key] = document.getElementById(key);
+}
 
-  function updateCustomFontControls() {
-    fontSelect.disabled = !customizeFontCheckbox.checked;
-    const showCustom = customizeFontCheckbox.checked && fontSelect.value === "font-custom";
-    customFontContainer.style.display = showCustom ? "flex" : "none";
-    customFontInput.disabled = !showCustom;
+// The active tab cannot change while the popup is open, so capture it once and
+// send its id along; resolving the active tab later in the background would
+// race against the user switching tabs during the debounce.
+let activeTabId = null;
+
+const PACKAGED_FONTS = new Set(["font-songti", "font-kaiti", "font-heiti"]);
+let lastFontFamily = null;
+
+function updateFontControls() {
+  document.getElementById("custom-font-row").hidden = controls["font-family"].value !== "font-custom";
+}
+
+// Returns which pages need a reload for this change, or null when the change
+// applies live (the custom font is injected by reader-content.js, which
+// watches storage).
+function scopeForChange(key) {
+  if (GENERAL_KEYS.has(key)) {
+    return "general";
   }
+  if (READER_KEYS.has(key)) {
+    return "reader";
+  }
+  if (key === "font-family") {
+    // Only packaged fonts are applied via registered CSS; switching between
+    // Default and Custom is handled live by reader-content.js.
+    return PACKAGED_FONTS.has(lastFontFamily) || PACKAGED_FONTS.has(controls["font-family"].value) ? "reader" : null;
+  }
+  return null;
+}
 
-  const controls = {
-    "hide-recommendations": recommendationCheckbox,
-    "hide-account-details": accountDetailsCheckbox,
-    "hide-navbar-links": navbarLinksCheckbox,
-    "text-align-start": textAlignCheckbox,
-    "customize-font": customizeFontCheckbox,
-    "font-family": fontSelect,
-    "change-background-color": changeBackgroundColorCheckbox,
-    "simplify-floating-buttons": simplifyFloatingButtonsCheckbox,
-    "custom-font-name": customFontInput,
-  };
+async function saveSetting(key, value) {
+  await chrome.storage.sync.set({ [key]: value });
+  updateFontControls();
 
-  // Load saved settings
-  chrome.storage.sync.get(Object.keys(controls), (result) => {
-    for (const key in controls) {
-      if (controls[key]) {
-        if (controls[key].type === "checkbox") {
-          controls[key].checked = !!result[key];
-        } else {
-          if (key === "font-family") {
-            controls[key].value = result[key] || "font-songti";
-          } else if (key === "custom-font-name") {
-            controls[key].value = result[key] || "";
-          }
-        }
-      }
+  const scope = scopeForChange(key);
+  if (key === "font-family") {
+    lastFontFamily = value;
+  }
+  if (scope) {
+    // The background collapses bursts of changes and reloads after syncing, so
+    // nothing is lost if the popup closes right away.
+    chrome.runtime.sendMessage({ action: "apply_settings", scope, tabId: activeTabId }).catch(() => {});
+  }
+}
+
+let fontNameTimer = null;
+
+function bindControls() {
+  for (const key of STYLE_SETTING_KEYS) {
+    const control = controls[key];
+
+    if (key === "custom-font-name") {
+      // Debounced live preview while typing; "change" (Enter/blur) flushes
+      // immediately so the value is not lost if the popup closes mid-debounce.
+      const commit = () => {
+        clearTimeout(fontNameTimer);
+        void saveSetting(key, control.value);
+      };
+      control.addEventListener("input", () => {
+        clearTimeout(fontNameTimer);
+        fontNameTimer = setTimeout(commit, 300);
+      });
+      control.addEventListener("change", commit);
+      continue;
     }
-    updateCustomFontControls();
+
+    control.addEventListener("change", () => {
+      const value = control.type === "checkbox" ? control.checked : control.value;
+      void saveSetting(key, value);
+    });
+  }
+}
+
+async function init() {
+  document.getElementById("version").textContent = `v${chrome.runtime.getManifest().version}`;
+
+  chrome.tabs.query({ active: true, currentWindow: true }).then(([tab]) => {
+    activeTabId = tab?.id ?? null;
   });
 
-  // Add change listeners
-  for (const key in controls) {
-    if (controls[key]) {
-      controls[key].addEventListener("change", (event) => {
-        const value = event.target.type === "checkbox" ? event.target.checked : event.target.value;
-        chrome.storage.sync.set({ [key]: value }, () => {
-          if (chrome.runtime.lastError) {
-            return;
-          }
-
-          if (key === "customize-font" || key === "font-family") {
-            updateCustomFontControls();
-          }
-
-          chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-            const activeTab = tabs[0];
-            if (!activeTab || !activeTab.id || !activeTab.url.includes("weread.qq.com")) {
-              return;
-            }
-
-            const isReaderPage = activeTab.url.includes("/web/reader/");
-            const shouldReload = generalReloadKeys.has(key) || (isReaderPage && readerReloadKeys.has(key));
-
-            if (shouldReload) {
-              chrome.runtime.sendMessage({ action: "sync_styles" }, () => {
-                chrome.tabs.reload(activeTab.id);
-              });
-              return;
-            }
-          });
-        });
-      });
+  const settings = await chrome.storage.sync.get(DEFAULT_SETTINGS);
+  for (const key of STYLE_SETTING_KEYS) {
+    const control = controls[key];
+    if (control.type === "checkbox") {
+      control.checked = Boolean(settings[key]);
+    } else {
+      control.value = settings[key];
     }
   }
-});
+  lastFontFamily = settings["font-family"];
+
+  updateFontControls();
+  bindControls();
+}
+
+void init();

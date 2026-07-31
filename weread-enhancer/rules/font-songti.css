@@ -1,29 +1,33 @@
 @font-face {
   font-family: "HYXinRenWenSong";
-  src: url("chrome-extension://__MSG_@@extension_id__/fonts/HYXinRenWenSong55W.ttf") format("truetype");
+  src: url("chrome-extension://__MSG_@@extension_id__/fonts/HYXinRenWenSong55W.woff2") format("woff2");
   font-weight: 400; /* Normal */
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
   font-family: "HYXinRenWenSong";
-  src: url("chrome-extension://__MSG_@@extension_id__/fonts/HYXinRenWenSong65W.ttf") format("truetype");
+  src: url("chrome-extension://__MSG_@@extension_id__/fonts/HYXinRenWenSong65W.woff2") format("woff2");
   font-weight: 500; /* Medium */
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
   font-family: "HYXinRenWenSong";
-  src: url("chrome-extension://__MSG_@@extension_id__/fonts/HYXinRenWenSong75W.ttf") format("truetype");
+  src: url("chrome-extension://__MSG_@@extension_id__/fonts/HYXinRenWenSong75W.woff2") format("woff2");
   font-weight: 600; /* SemiBold */
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
   font-family: "FZNewShuSong-Z10";
-  src: url("chrome-extension://__MSG_@@extension_id__/fonts/FZXSSK.TTF") format("truetype");
+  src: url("chrome-extension://__MSG_@@extension_id__/fonts/FZXSSK.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 .wr_various_font_provider_wrapper * {

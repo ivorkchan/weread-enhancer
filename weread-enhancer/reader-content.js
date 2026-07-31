@@ -1,20 +1,21 @@
+const FONT_SETTING_DEFAULTS = {
+  "font-family": "font-songti",
+  "custom-font-name": "",
+};
+
+const CUSTOM_FONT_STYLE_ID = "weread-enhancer-font-custom";
+
 function sanitizeFontName(input) {
-  if (!input || typeof input !== "string") {
+  if (typeof input !== "string") {
     return "";
   }
 
-  const trimmed = input.trim();
-  if (!trimmed) {
-    return "";
-  }
-
-  return trimmed.replace(/"/g, '\\"');
+  return input.trim().replace(/\\/g, "").replace(/"/g, '\\"');
 }
 
-function applyCustomFont(customFontName) {
-  const safeName = sanitizeFontName(customFontName);
-  const styleId = "weread-enhancer-font-custom";
-  const existingStyle = document.getElementById(styleId);
+function setCustomFont(fontName) {
+  const safeName = sanitizeFontName(fontName);
+  const existingStyle = document.getElementById(CUSTOM_FONT_STYLE_ID);
 
   if (existingStyle) {
     existingStyle.remove();
@@ -25,16 +26,25 @@ function applyCustomFont(customFontName) {
   }
 
   const styleElement = document.createElement("style");
-  styleElement.id = styleId;
+  styleElement.id = CUSTOM_FONT_STYLE_ID;
   styleElement.textContent = `.wr_various_font_provider_wrapper * { font-family: "${safeName}", serif; }`;
-  const parent = document.head || document.documentElement;
-  if (parent) {
-    parent.appendChild(styleElement);
-  }
+  (document.head || document.documentElement).appendChild(styleElement);
 }
 
-chrome.storage.sync.get(["customize-font", "font-family", "custom-font-name"], (result) => {
-  if (result["customize-font"] && result["font-family"] === "font-custom") {
-    applyCustomFont(result["custom-font-name"] || "");
+function applyFontSettings(settings) {
+  const enabled = settings["font-family"] === "font-custom";
+  setCustomFont(enabled ? settings["custom-font-name"] : "");
+}
+
+chrome.storage.sync.get(FONT_SETTING_DEFAULTS).then(applyFontSettings);
+
+// Re-apply on change so custom font edits take effect without a page reload.
+chrome.storage.onChanged.addListener((changes, areaName) => {
+  if (areaName !== "sync") {
+    return;
+  }
+
+  if (Object.keys(FONT_SETTING_DEFAULTS).some((key) => Object.prototype.hasOwnProperty.call(changes, key))) {
+    void chrome.storage.sync.get(FONT_SETTING_DEFAULTS).then(applyFontSettings);
   }
 });
