@@ -26,6 +26,7 @@ yarn-error.log*
 *.sublime-project
 .idea/
 .vscode/
+.claude/
 Thumbs.db
 Desktop.ini 
 *.zip

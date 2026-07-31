@@ -1,0 +1,92 @@
+name: Publish to Chrome Web Store
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: "Version bump applied before publishing"
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+          - none
+        default: patch
+      mode:
+        description: "upload-and-publish submits for review; upload-only saves a draft in the developer dashboard"
+        type: choice
+        options:
+          - upload-and-publish
+          - upload-only
+        default: upload-and-publish
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Bump manifest version
+        if: inputs.bump != 'none'
+        id: bump
+        env:
+          BUMP: ${{ inputs.bump }}
+        run: |
+          node <<'EOF'
+          const fs = require("fs");
+          const path = "weread-enhancer/manifest.json";
+          const raw = fs.readFileSync(path, "utf8");
+          const current = JSON.parse(raw).version;
+          const parts = current.split(".").map(Number);
+          while (parts.length < 3) parts.push(0);
+          if (process.env.BUMP === "major") { parts[0]++; parts[1] = 0; parts[2] = 0; }
+          else if (process.env.BUMP === "minor") { parts[1]++; parts[2] = 0; }
+          else { parts[2]++; }
+          const next = parts.join(".");
+          // String replacement instead of a JSON round-trip so the rest of the
+          // file keeps its Prettier formatting byte for byte.
+          fs.writeFileSync(path, raw.replace(`"version": "${current}"`, `"version": "${next}"`));
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, `version=${next}\n`);
+          console.log(`${current} -> ${next}`);
+          EOF
+
+      # Push the bump before publishing: a pushed bump with a failed publish is a
+      # harmless version gap, while a published version that never lands in git
+      # would make the next auto-bump collide with the store.
+      - name: Commit and push version bump
+        if: inputs.bump != 'none'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898270+github-actions[bot]@users.noreply.github.com"
+          git add weread-enhancer/manifest.json
+          git commit -m "chore: bump version to ${{ steps.bump.outputs.version }}"
+          git push
+
+      - name: Show version being published
+        run: node -p "'manifest version ' + require('./weread-enhancer/manifest.json').version"
+
+      - name: Upload draft
+        if: inputs.mode == 'upload-only'
+        run: npx --yes chrome-webstore-upload-cli upload --source weread-enhancer
+        env:
+          EXTENSION_ID: hpahddocpjnehfakhmjkepmnaihffdmn
+          CLIENT_ID: ${{ secrets.CHROME_CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
+
+      - name: Upload and publish
+        if: inputs.mode == 'upload-and-publish'
+        run: npx --yes chrome-webstore-upload-cli --source weread-enhancer
+        env:
+          EXTENSION_ID: hpahddocpjnehfakhmjkepmnaihffdmn
+          CLIENT_ID: ${{ secrets.CHROME_CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
