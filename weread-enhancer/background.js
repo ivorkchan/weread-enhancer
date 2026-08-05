@@ -49,11 +49,6 @@ const STYLE_SCRIPTS = {
     matches: READER_MATCHES,
     css: ["rules/font-heiti.css"],
   },
-  "font-latin": {
-    id: "reader-font-latin",
-    matches: READER_MATCHES,
-    css: ["rules/font-latin.css"],
-  },
 };
 
 const TOGGLED_SCRIPT_KEYS = [
@@ -63,7 +58,6 @@ const TOGGLED_SCRIPT_KEYS = [
   "text-align-start",
   "change-background-color",
   "simplify-floating-buttons",
-  "font-latin",
 ];
 
 const MANAGED_SCRIPT_IDS = Object.values(STYLE_SCRIPTS).map((script) => script.id);

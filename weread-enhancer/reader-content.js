@@ -27,7 +27,7 @@ function setCustomFont(fontName) {
 
   const styleElement = document.createElement("style");
   styleElement.id = CUSTOM_FONT_STYLE_ID;
-  styleElement.textContent = `.wr_various_font_provider_wrapper * { font-family: "WeReadEnhancerLatin", "${safeName}", serif; }`;
+  styleElement.textContent = `.wr_various_font_provider_wrapper * { font-family: "${safeName}", serif; }`;
   (document.head || document.documentElement).appendChild(styleElement);
 }
 

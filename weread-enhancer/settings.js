@@ -7,7 +7,6 @@ const DEFAULT_SETTINGS = {
   "text-align-start": true,
   "font-family": "font-songti",
   "custom-font-name": "",
-  "font-latin": false,
   "change-background-color": true,
   "simplify-floating-buttons": true,
 };
