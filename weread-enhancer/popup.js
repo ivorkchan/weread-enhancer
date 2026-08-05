@@ -1,5 +1,10 @@
 const GENERAL_KEYS = new Set(["hide-recommendations", "hide-account-details", "hide-navbar-links"]);
-const READER_KEYS = new Set(["text-align-start", "change-background-color", "simplify-floating-buttons"]);
+const READER_KEYS = new Set([
+  "text-align-start",
+  "change-background-color",
+  "simplify-floating-buttons",
+  "font-latin",
+]);
 
 const controls = {};
 for (const key of STYLE_SETTING_KEYS) {
