@@ -1,4 +1,4 @@
-.navBar_link,
+.navBar_link:not(.navBar_link_Login),
 .navBar_separator {
   display: none !important;
 }

@@ -22,3 +22,13 @@
 .wr_horizontalReader .readerControls:hover {
   opacity: 1;
 }
+
+.wr_horizontalReader .readerControls::after {
+  content: "";
+  position: absolute;
+  top: -50vh;
+  bottom: -50vh;
+  left: -28px;
+  right: -240px;
+  z-index: -1;
+}
