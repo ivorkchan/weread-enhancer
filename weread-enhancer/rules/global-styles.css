@@ -19,6 +19,12 @@ html {
   margin-bottom: 16px !important;
 }
 
+.reader_footer_note {
+  width: 18px !important;
+  height: 18px !important;
+  top: -8px;
+}
+
 .wr_index_mini_shelf_card {
   box-shadow:
     0px 0px 0px 1px #0000000f,
